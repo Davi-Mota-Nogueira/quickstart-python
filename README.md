@@ -23,3 +23,64 @@ CREATE TABLE demo.users (
     email text,
     firstname text);
 ```
+
+## Connect to your cluster
+
+All of our code is contained in the `quickstart.py` file. 
+The `create_connection()` connects to our cluster.
+By default, `Cluster()` will try to connect to 127.0.0.1 (localhost). Replace with your own contact point(s) if necessary.
+
+```python
+// TO DO: Fill in your own contact point
+def create_connection():
+    cluster = Cluster(['127.0.0.1'])
+    return cluster.connect('demo')
+```
+
+## CRUD Operations
+Fill the code in the functions that will add a user, get a user, update a user and delete a user from the table with the driver.
+
+### INSERT a user
+```python
+def set_user(session, lastname, age, city, email, firstname):
+    //TO DO: execute SimpleStatement that inserts one user into the table
+    session.execute("INSERT INTO users (lastname, age, city, email, firstname) VALUES (%s,%s,%s,%s,%s)", [lastname, age, city, email, firstname])
+```
+### SELECT a user
+```python
+def get_user(session, lastname):
+    //TO DO: execute SimpleStatement that retrieves one user from the table
+    //TO DO: print firstname and age of user
+    rows = session.execute("SELECT * FROM users WHERE lastname = %s", [lastname])
+    for user_row in rows:
+        print user_row.firstname, user_row.age
+```
+
+### UPDATE a user's age
+```python
+def update_user(session, new_age, lastname):
+    //TO DO: execute SimpleStatement that updates the age of one user
+    session.execute("UPDATE users SET age =%s WHERE lastname = %s", [new_age, lastname])
+```   
+
+### DELETE a user
+```python
+def delete_user(session, lastname):
+    //TO DO: execute SimpleStatement that deletes one user from the table
+    session.execute("DELETE FROM users WHERE lastname = %s", [lastname])
+```
+ ## License
+Copyright 2019 Rebecca Mills
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.   
+
