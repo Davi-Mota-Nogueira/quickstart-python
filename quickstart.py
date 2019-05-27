@@ -1,7 +1,7 @@
 from cassandra.cluster import Cluster
 
 def create_connection():
-    cluster = Cluster()
+    cluster = Cluster(['127.0.0.1'])
     return cluster.connect('demo')
 
 def set_user(session, lastname, age, city, email, firstname):
