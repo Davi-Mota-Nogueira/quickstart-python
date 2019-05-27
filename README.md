@@ -31,8 +31,8 @@ The `create_connection()` connects to our cluster.
 By default, `Cluster()` will try to connect to 127.0.0.1 (localhost). Replace with your own contact point(s) if necessary.
 
 ```python
-// TO DO: Fill in your own contact point
 def create_connection():
+    # TO DO: Fill in your own contact point
     cluster = Cluster(['127.0.0.1'])
     return cluster.connect('demo')
 ```
@@ -43,14 +43,14 @@ Fill the code in the functions that will add a user, get a user, update a user a
 ### INSERT a user
 ```python
 def set_user(session, lastname, age, city, email, firstname):
-    //TO DO: execute SimpleStatement that inserts one user into the table
+    # TO DO: execute SimpleStatement that inserts one user into the table
     session.execute("INSERT INTO users (lastname, age, city, email, firstname) VALUES (%s,%s,%s,%s,%s)", [lastname, age, city, email, firstname])
 ```
 ### SELECT a user
 ```python
 def get_user(session, lastname):
-    //TO DO: execute SimpleStatement that retrieves one user from the table
-    //TO DO: print firstname and age of user
+    # TO DO: execute SimpleStatement that retrieves one user from the table
+    # TO DO: print firstname and age of user
     rows = session.execute("SELECT * FROM users WHERE lastname = %s", [lastname])
     for user_row in rows:
         print user_row.firstname, user_row.age
@@ -59,14 +59,14 @@ def get_user(session, lastname):
 ### UPDATE a user's age
 ```python
 def update_user(session, new_age, lastname):
-    //TO DO: execute SimpleStatement that updates the age of one user
+    # TO DO: execute SimpleStatement that updates the age of one user
     session.execute("UPDATE users SET age =%s WHERE lastname = %s", [new_age, lastname])
 ```   
 
 ### DELETE a user
 ```python
 def delete_user(session, lastname):
-    //TO DO: execute SimpleStatement that deletes one user from the table
+    # TO DO: execute SimpleStatement that deletes one user from the table
     session.execute("DELETE FROM users WHERE lastname = %s", [lastname])
 ```
  ## License
