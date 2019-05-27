@@ -1,6 +1,6 @@
 from cassandra.cluster import Cluster
 
-def connection_factory():
+def create_connection():
     cluster = Cluster()
     return cluster.connect('demo')
 
@@ -22,7 +22,7 @@ def delete_user(session, lastname):
 
 def main():
 
-    session = connection_factory()
+    session = create_connection()
     lastname = "Jones"
     age = 35
     city = "Austin"
