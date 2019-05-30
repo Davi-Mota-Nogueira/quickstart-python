@@ -27,7 +27,7 @@ CREATE TABLE demo.users (
 ## Connect to your cluster
 
 All of our code is contained in the `quickstart.py` file. 
-The `create_connection()` connects to our cluster.
+The `create_connection()` function connects to our cluster.
 By default, `Cluster()` will try to connect to 127.0.0.1 (localhost). Replace with your own contact point(s) if necessary.
 
 ```python
