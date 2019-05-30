@@ -52,9 +52,8 @@ def set_user(session, lastname, age, city, email, firstname):
 def get_user(session, lastname):
     # TO DO: execute SimpleStatement that retrieves one user from the table
     # TO DO: print firstname and age of user
-    rows = session.execute("SELECT * FROM users WHERE lastname = %s", [lastname])
-    for user_row in rows:
-        print user_row.firstname, user_row.age
+    result = session.execute("SELECT * FROM users WHERE lastname = %s", [lastname]).one()
+    print result.firstname, result.age
 ```
 
 ### UPDATE a user's age
