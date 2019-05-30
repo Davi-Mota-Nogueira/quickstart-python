@@ -6,8 +6,9 @@ If you are having trouble, the complete code solution for `quickstart.py` can be
 
 ## Prerequisites
   * A running instance of [Apache Cassandra®](http://cassandra.apache.org/download/) 2.1+
-  * [Python](https://www.python.org/downloads/) 2.7, 3.3, 3.4, 3.5, or 3.6.
+  * [Python](https://www.python.org/downloads/) 2.7, 3.4, 3.5, or 3.6.
   * Use Pip to install the driver: `pip install cassandra-driver`
+  * We highly recommend to use a virtualenv
   
   ## Create the keyspace and table
 The `users.cql` file provides the schema used for this project:
