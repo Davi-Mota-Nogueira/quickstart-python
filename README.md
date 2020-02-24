@@ -1,7 +1,7 @@
 # DataStax Python Driver for Apache Cassandra Quickstart
 
 A basic Python demo CRUD application using the DataStax Python Driver for Apache Cassandra. 
-Run the [quickstart_python.java](quickstart_python.java) file if you want to run the application with the complete code.
+Run the [quickstart_python.py](quickstart_python.py) file if you want to run the application with the complete code.
 
 Contributors: [Rebecca Mills](https://github.com/beccam)
 
