@@ -1,100 +1,106 @@
-# DataStax Python Driver for Apache Cassandra Quickstart
+# DataStax Desktop - Python Netflix example
+An introduction to using the Cassandra database with well-defined steps to optimize your learning. Using a Netflix dataset for sample data, your locally running Cassandra database will contain a minimal set of show data for you to customize and experiment with.
 
-A basic Python demo CRUD application using the DataStax Python Driver for Apache Cassandra. 
-Run the [quickstart_complete.py](quickstart_complete.py) file if you want to skip the exercise and run the application with the complete code.
-
-Contributors: [Rebecca Mills](https://github.com/beccam)
+Contributors:
+* [Jeff Banks](https://github.com/jeffbanks)
+* [Chris Splinter](https://github.com/csplinter)
 
 ## Objectives
 
-* To demonstrate how to perform basic CRUD operations with the DataStax Python Driver.
-* The intent is to help users get up and running quickly with the driver. 
-
-## How this Sample Works
-This project walks through basic CRUD operations using Cassandra. The demo application will first insert a row of user data, select that same row back out, update the row and finally delete the user. The README includes the code snippets to be filled in to the main application code to complete the functionality.
+* Leverage DataStax driver APIs for interaction with a local running Cassandra database.
+* Set up a Cassandra Query Language (CQL) session and perform operations such as creating, reading, and writing.
+* Use the Netflix show dataset as example information across three differently constructed tables.
+* Observe how the partition key along with clustering keys produce an optimized experience.
+* Have fun!
 
 ## Project Layout
 
-* [quickstart.py](quickstart.py) - main application file with space to fill in CRUD operation code
-* [users.cql](users.cql) - Use this file to create the schema 
+* [app.py](app.py) - main application file
+* [netflix-shows.cql](netflix-shows.cql) - file to create the schema
 
-## Prerequisites
-  * A running instance of [Apache Cassandra®](http://cassandra.apache.org/download/) 2.1+
-  * [Python](https://www.python.org/downloads/) 2.7, 3.4, 3.5, or 3.6.
-  * Use Pip to install the driver: `pip install cassandra-driver`
-  * We highly recommend to use a virtualenv
-  
-  ## Create the keyspace and table
-The `users.cql` file provides the schema used for this project:
+## How this works
+To get started, read the `app.py` comments to learn the steps for interacting with your Cassandra database. The functions invoked by the `app.py` are created to provide more flexibility for modifications as you learn.
 
-```sql
-CREATE KEYSPACE demo
-    WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'};
+## Setup and running
 
-CREATE TABLE demo.users (
-    lastname text PRIMARY KEY,
-    age int,
-    city text,
-    email text,
-    firstname text);
+### Prerequisites
+If using [DataStax Desktop](https://www.datastax.com/blog/2020/05/learn-cassandra-datastax-desktop), no prerequisites are required. The Cassandra instance is provided with the DataStax Desktop stack as part of container provisioning.
+
+If NOT using DataStax Desktop, spin up your own local instance of Cassandra exposing its address and port to align with the settings in the `app.py` file.  You will need to install and perform the following steps:
+
+* A running instance of Apache Cassandra® 2.1+
+* Python 2.7, 3.4, 3.5, or 3.6.
+* Installed Cassandra driver: `pip install cassandra-driver`
+* virtualenv (recommended)
+
+All of the connection code is contained in the `app.py` file.  The `create_cluster` function is used to connect to your instance of Cassandra.
+
+```javascipt
+const client = new cassandra.Client({
+  contactPoints: ['127.0.0.1'],
+  localDataCenter: 'dc1',
+  keyspace: 'demo'
+});
 ```
 
-## Connect to your cluster
+## Running
+Start the app from the command line.
 
-All of our code is contained in the `quickstart.py` file. 
-The `create_connection()` function connects to our cluster.
-By default, `Cluster()` will try to connect to 127.0.0.1 (localhost). Replace with your own contact point(s) if necessary.
+> python app.py
 
-```python
-def create_connection():
-    # TO DO: Fill in your own contact point
-    cluster = Cluster(['127.0.0.1'])
-    return cluster.connect('demo')
+### Console output
+
 ```
+Connection to cluster - step 1
 
-## CRUD Operations
-Fill the code in the functions that will add a user, get a user, update a user and delete a user from the table with the driver.
+Creating prepared statements - step 2
+Preparing: INSERT INTO netflix_master (title, show_id, cast, country, date_added, description, director, duration, listed_in, rating, release_year, type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+Preparing: INSERT INTO netflix_titles_by_date (show_id, date_added, release_year, title, type) VALUES(?, ?, ?, ?, ?)
+Preparing: INSERT INTO netflix_titles_by_rating (show_id, rating, title) VALUES (?,?,?)
+Preparing: SELECT director FROM netflix_master WHERE title = ?
+Preparing: SELECT * FROM netflix_master WHERE title = ?
+Preparing: UPDATE netflix_master SET director = ? WHERE show_id = ? AND title = ?
 
-### INSERT a user
-```python
-def set_user(session, lastname, age, city, email, firstname):
-    # TO DO: execute SimpleStatement that inserts one user into the table
-    session.execute("INSERT INTO users (lastname, age, city, email, firstname) VALUES (%s,%s,%s,%s,%s)", [lastname, age, city, email, firstname])
+Creating tables - step 3
+Creating Primary Table
+Creating Titles By Date Table
+Creating Titles By Rating Table
+
+Inserting records - step 4
+Inserting into Primary Table for title: Life of Jimmy
+Inserting into Primary Table for title: Pulp Fiction
+Inserting into TitlesByDate Table for title: Life of Jimmy
+Inserting into TitlesByDate Table for title: Pulp Fiction
+Inserting into TitlesByRating Table for title: Life of Jimmy
+Inserting into TitlesByRating Table for title: Pulp Fiction
+
+Reading records - step 5
+Selecting all from Table: netflix_master
+[Row(title=u'Life of Jimmy', show_id=100000000, cast=[u'Jimmy'], country=[u'United States'], date_added=Date(18414), description=u'Experiences of a guitar playing DataStax developer', director=[u'Franky J'], duration=u'42 min', listed_in=[u'Action'], rating=u'TV-18', release_year=2020, type=u'Movie'), Row(title=u'Pulp Fiction',
+show_id=100000001, cast=[u'John Travolta', u'Samuel L. Jackson', u'Uma Thurman', u'Harvey Keitel', u'Tim Roth', u'Amanda Plummer', u'Maria de Medeiros', u'Ving Rhames', u'Eric Stoltz', u'Rosanna Arquette', u'Christopher
+Walken', u'Bruce Willis'], country=[u'United States'], date_added=Date(17915), description=u'This stylized crime caper weaves together stories ...', director=[u'Quentin Tarantino'], duration=u'42 min', listed_in=[u'Classic Movies', u'Cult Movies', u'Dramas'], rating=u'R', release_year=1994, type=u'Movie')]
+
+Selecting all from Table: netflix_titles_by_rating
+[Row(rating=u'TV-18', show_id=100000000, title=u'Life of Jimmy'), Row(rating=u'R', show_id=100000001, title=u'Pulp Fiction')]
+
+Selecting all from Table: netflix_titles_by_date
+[Row(release_year=2020, date_added=Date(18414), show_id=100000000, title=u'Life of Jimmy', type=u'Movie'), Row(release_year=1994, date_added=Date(17915), show_id=100000001, title=u'Pulp Fiction', type=u'Movie')]
+
+Select all from Primary table with Title: Pulp Fiction
+[Row(title=u'Pulp Fiction', show_id=100000001, cast=[u'John Travolta', u'Samuel L. Jackson', u'Uma Thurman', u'Harvey Keitel', u'Tim Roth', u'Amanda Plummer', u'Maria de Medeiros', u'Ving Rhames', u'Eric Stoltz', u'Rosanna Arquette', u'Christopher Walken', u'Bruce Willis'], country=[u'United States'], date_added=Date(17915), description=u'This stylized crime caper weaves together stories ...', director=[u'Quentin Tarantino'], duration=u'42 min', listed_in=[u'Classic Movies', u'Cult Movies', u'Dramas'], rating=u'R', release_year=1994, type=u'Movie')]
+
+Selecting director from Primary table with Title: Pulp Fiction:
+[Row(director=[u'Quentin Tarantino'])]
+
+Updating record with read - step 6
+Updating director list by Title: Pulp Fiction and Show ID: 100000001
+
+Selecting director from Primary table with Title: Pulp Fiction:
+[Row(director=[u'Quentin Jerome Tarantino'])]
+Shutting down cluster - step 7
 ```
-### SELECT a user
-```python
-def get_user(session, lastname):
-    # TO DO: execute SimpleStatement that retrieves one user from the table
-    # TO DO: print firstname and age of user
-    result = session.execute("SELECT * FROM users WHERE lastname = %s", [lastname]).one()
-    print result.firstname, result.age
-```
+### Having trouble?
+Are you getting errors reported but can't figure out what to do next?  Copy your log output, document any details, and head over to the [DataStax Community](https://community.datastax.com/spaces/131/datastax-desktop.html) to get some assistance.
 
-### UPDATE a user's age
-```python
-def update_user(session, new_age, lastname):
-    # TO DO: execute SimpleStatement that updates the age of one user
-    session.execute("UPDATE users SET age =%s WHERE lastname = %s", [new_age, lastname])
-```   
-
-### DELETE a user
-```python
-def delete_user(session, lastname):
-    # TO DO: execute SimpleStatement that deletes one user from the table
-    session.execute("DELETE FROM users WHERE lastname = %s", [lastname])
-```
- ## License
-Copyright 2019 Rebecca Mills
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.   
-
+### Questions or comments?
+If you have any questions or want to post a feature request, visit the [Desktop space at DataStax Community](https://community.datastax.com/spaces/131/datastax-desktop.html)
