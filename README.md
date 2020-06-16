@@ -4,6 +4,7 @@ An introduction to using the Cassandra database with well-defined steps to optim
 Contributors:
 * [Jeff Banks](https://github.com/jeffbanks)
 * [Chris Splinter](https://github.com/csplinter)
+* [Jamie Gillenwater](https://github.com/jgillenwater)
 
 ## Objectives
 
