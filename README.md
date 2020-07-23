@@ -1,3 +1,5 @@
+[![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/beccam/quickstart-python)
+
 # DataStax Python Driver for Apache Cassandra Quickstart
 
 A basic Python demo CRUD application using the DataStax Python Driver for Apache Cassandra. 
